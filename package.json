@@ -1,0 +1,33 @@
+{
+  "name": "express-rest-api-starter",
+  "version": "1.0.0",
+  "description": "Rest API starter with Express, Mysql, JWT Authentication and Swagger Docs",
+  "main": "index.js",
+  "scripts": {
+    "start": "PORT=4200 node server.js",
+    "dev": "NODE_ENV=test PORT=4205 nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/98oktay/express-rest-api-starter.git"
+  },
+  "keywords": [],
+  "author": "98oktay@gmail.com",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/98oktay/express-rest-api-starter/issues"
+  },
+  "homepage": "https://github.com/98oktay/express-rest-api-starter#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-rate-limit": "^4.0.2",
+    "helmet": "^3.18.0",
+    "mysql": "^2.17.1",
+    "swagger-jsdoc": "^3.2.9",
+    "swagger-ui-express": "^4.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
