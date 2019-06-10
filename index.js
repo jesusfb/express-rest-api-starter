@@ -1,31 +1,93 @@
-//require dependencies
-const express = require('express');
-const app = express();
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const routesV1 = require('./src/routesV1');
-const port = process.env.PORT || 4200;
+#!/usr/bin/env node
 
+/**
+ * Module dependencies.
+ */
 
+const app = require('./src/app');
+const debug = require('debug')('server:server');
+const http = require('http');
+const CONFIG = require('./src/config/config');
+/**
+ * Get port from environment and store in Express.
+ */
 
-app.use('/v1', routesV1);
+const port = normalizePort(CONFIG.port || '3000');
+app.set('port', port);
 
+/**
+ * Create HTTP server.
+ */
 
-const options = {    
-    "swaggerDefinition": require('./src/swagger.json'),
-    "apis": [
-        "src/controllers/*.js"
-    ]
-};
-const specs = swaggerJsdoc(options);
+const server = http.createServer(app);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
+/**
+ * Normalize a port into a number, string, or false.
+ */
 
+function normalizePort(val) {
+    const port = parseInt(val, 10);
 
-//start Express server on defined port
-app.listen(port);
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-//log to console to let us know it's working
-console.log('Kushy API server started on: ' + port);
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    const bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    const addr = server.address();
+    const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+
+    console.log('Server listenning on port:', addr.port);
+
+}
