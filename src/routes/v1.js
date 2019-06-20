@@ -4,14 +4,8 @@ const router = express.Router();
 const UserController = require('../controllers/user.controller');
 const CompanyController = require('../controllers/company.controller');
 const HomeController = require('../controllers/home.controller');
-
 const custom = require('./../middleware/custom');
-
-const passport = require('passport');
-
-
-require('./../middleware/passport')(passport);
-
+const authenticateJWT = require('./../middleware/authenticateJWT');
 
 /**
  * @swagger
@@ -60,7 +54,7 @@ router.post('/users', UserController.create);// C
  *          schema:
  *            "$ref": "#/definitions/ApiErrorResponse"
  */
-router.get('/users', passport.authenticate('jwt', {session: false}, null), UserController.get);        // R
+router.get('/users', authenticateJWT, UserController.get);        // R
 
 /**
  * @swagger
@@ -86,7 +80,7 @@ router.get('/users', passport.authenticate('jwt', {session: false}, null), UserC
  *          schema:
  *            "$ref": "#/definitions/ApiErrorResponse"
  */
-router.put('/users', passport.authenticate('jwt', {session: false}, null), UserController.update);     // U
+router.put('/users', authenticateJWT, UserController.update);     // U
 
 /**
  * @swagger
@@ -105,7 +99,7 @@ router.put('/users', passport.authenticate('jwt', {session: false}, null), UserC
  *          schema:
  *            "$ref": "#/definitions/ApiErrorResponse"
  */
-router.delete('/users', passport.authenticate('jwt', {session: false}, null), UserController.remove);     // D
+router.delete('/users', authenticateJWT, UserController.remove);     // D
 
 /**
  * @swagger
@@ -133,13 +127,13 @@ router.delete('/users', passport.authenticate('jwt', {session: false}, null), Us
  */
 router.post('/users/login', UserController.login);
 
-router.post('/companies', passport.authenticate('jwt', {session: false}, null), CompanyController.create);                  // C
-router.get('/companies', passport.authenticate('jwt', {session: false}, null), CompanyController.getAll);                  // R
+router.post('/companies', authenticateJWT, CompanyController.create);                  // C
+router.get('/companies', authenticateJWT, CompanyController.getAll);                  // R
 
-router.get('/companies/:company_id', passport.authenticate('jwt', {session: false}, null), custom.company, CompanyController.get);     // R
-router.put('/companies/:company_id', passport.authenticate('jwt', {session: false}, null), custom.company, CompanyController.update);  // U
-router.delete('/companies/:company_id', passport.authenticate('jwt', {session: false}, null), custom.company, CompanyController.remove);  // D
+router.get('/companies/:company_id', authenticateJWT, custom.company, CompanyController.get);     // R
+router.put('/companies/:company_id', authenticateJWT, custom.company, CompanyController.update);  // U
+router.delete('/companies/:company_id', authenticateJWT, custom.company, CompanyController.remove);  // D
 
-router.get('/dash', passport.authenticate('jwt', {session: false}, null), HomeController.Dashboard);
+router.get('/dash', authenticateJWT, HomeController.Dashboard);
 
 module.exports = router;
